@@ -78,7 +78,7 @@
     rowIndex: number = -1
     cellIndex: number = 0
 
-    intervalId: any
+    touchIntervalId: any
     gameIntervalId: any
 
     grid: object[][] = []
@@ -360,12 +360,12 @@
     touchStart(e: TouchEvent, fn: (() => void)): void {
       if(e.touches.length === 1) {
         fn()
-        this.intervalId = setInterval(fn, 100)
+        this.touchIntervalId = setInterval(fn, 100)
       }
     }
 
     touchEnd(): void {
-      clearInterval(this.intervalId)
+      clearInterval(this.touchIntervalId)
     }
 
     checkOrientation(): void {
