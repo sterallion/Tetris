@@ -1,0 +1,30 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+}
+
+body {
+  background: #000 url("../assets/bg.png");
+
+  @include media-breakpoint-down(md) {
+    background-size: cover;
+  }
+}
+
+h1 {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  text-shadow: -2px 2px 5px #cc7100;
+}
+
+main {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-basis: 100%;
+  height: 100%;
+}

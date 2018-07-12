@@ -1,0 +1,40 @@
+.btn {
+  background: none;
+  border: none;
+  padding: .5rem 1rem;
+  width: 100%;
+  font-weight: normal;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  user-select: none;
+  display: block;
+  @include media-breakpoint-up(lg) {
+    width: 50%;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.btn-orange {
+  @extend .btn;
+  color: #000;
+  background: linear-gradient(270deg, #000, #ff4600, #000);
+  font-weight: bold;
+}
+
+.btn-green {
+  @extend .btn;
+  color: #000;
+  background: linear-gradient(270deg, #000, #009e1b, #000);
+  font-weight: bold;
+}
+
+.btn-blue {
+  @extend .btn;
+  color: #000;
+  background: linear-gradient(270deg, #000, #00b8ff, #000);
+  font-weight: bold;
+}
