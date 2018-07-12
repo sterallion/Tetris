@@ -400,8 +400,6 @@
   $headerTouchHeight: 60px;
   $footerTouchHeight: 80px;
 
-  $mobileBrowserBar: 60px;
-
   .tetris {
     margin: 0 auto;
     display: flex;
@@ -410,7 +408,7 @@
       width: calc((100vh - #{$headerHeight} - #{$footerHeight}) / 2);
     }
     @include media-breakpoint-down(md) {
-      width: calc((100vh - #{$headerTouchHeight} - #{$footerTouchHeight} - #{$mobileBrowserBar}) / 2);
+      width: calc((100vh - #{$headerTouchHeight} - #{$footerTouchHeight}) / 2);
     }
   }
 

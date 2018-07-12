@@ -134,6 +134,7 @@
 
   .row-score {
     display: flex;
+    margin-top: .3rem;
 
     &.-active {
       color: #009e1b;
