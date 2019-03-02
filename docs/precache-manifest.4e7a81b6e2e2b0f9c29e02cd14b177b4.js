@@ -1,15 +1,19 @@
 self.__precacheManifest = [
   {
-    "revision": "eabd296cfd53820cce55",
-    "url": "js/chunk-vendors.eabd296c.js"
+    "revision": "310e4266096cf868a945",
+    "url": "js/chunk-vendors.7b9e98ab.js"
   },
   {
-    "revision": "6d4e9ed8d271fe671088",
-    "url": "js/app.6d4e9ed8.js"
+    "revision": "1a0b5bbc8afe2e8414df",
+    "url": "js/app.8107e099.js"
   },
   {
-    "revision": "3f5010e2393445b9ada64fc67fb4c141",
+    "revision": "6ecd96e4af1d4ef70765374076c74430",
     "url": "index.html"
+  },
+  {
+    "revision": "e7bc7414ee6cd2b752c7e8b1a47b64fe",
+    "url": "img/hamburger.e7bc7414.svg"
   },
   {
     "revision": "586c6e1425a33f4d37e0a93f7e8971f4",
@@ -28,7 +32,7 @@ self.__precacheManifest = [
     "url": "favicon.ico"
   },
   {
-    "revision": "6d4e9ed8d271fe671088",
-    "url": "css/app.ce6ff8b4.css"
+    "revision": "1a0b5bbc8afe2e8414df",
+    "url": "css/app.6d3bb6cd.css"
   }
 ];
