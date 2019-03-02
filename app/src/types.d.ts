@@ -18,3 +18,8 @@ export interface Score {
   listScore: Stat[],
   indexScore: number
 }
+
+export interface State {
+  state: number,
+  color: string,
+}

@@ -1,54 +1,57 @@
 <template>
   <div class="tetris">
-    <div v-if="isLandscape" class="landscape">
+    <div v-if="isLandscape" class="--landscape">
       Turn me, please
     </div>
 
     <template v-else>
       <template v-if="isShowGame">
-        <div class="header">
-          <div class="menu" @click.prevent="isPause = true">&#8801;</div>
-          <div class="score">
+        <div class="--header">
+          <div class="--menu" @click.prevent="isPause = true">
+            <img src="@/assets/hamburger.svg">
+          </div>
+          <div class="--score">
             <div>{{ stat.score }} / {{ stat.lines }}</div>
           </div>
-          <div class="mini-grid">
+          <div class="--grid -mini">
             <div :key="n"
                  v-for="(row, n) in block.next"
-                 class="mini-grid-row">
+                 class="--row">
               <div :key="i"
                    v-for="(cell, i) in row"
-                   class="mini-grid-cell"
+                   class="--cell"
                    :class="{[color.next]: cell}">
               </div>
             </div>
           </div>
         </div>
 
-        <div class="main">
-          <div class="grid">
+        <div class="--main" ref="main">
+          <div class="--grid">
             <div :key="n"
                  v-for="(row, n) in grid"
-                 class="grid-row">
+                 class="--row">
               <div :key="i"
                    v-for="(cell, i) in row"
-                   class="grid-cell"
+                   class="--cell"
                    :class="{[cell.color]: cell.state}">
               </div>
             </div>
           </div>
         </div>
 
-        <div class="footer">
-          <div class="nav-arrow" @touchstart.prevent="touchStart($event, toLeft)" @touchend="touchEnd">&larr;</div>
-          <div class="nav-arrow" @touchstart.prevent="touchStart($event, toRight)" @touchend="touchEnd">&rarr;</div>
-          <div class="nav-arrow" @click.prevent="rotateBlock">&uarr;</div>
-          <div class="nav-arrow" @touchstart.prevent="touchStart($event, toDown)" @touchend="touchEnd">&darr;</div>
+        <div class="--footer">
+          <div class="--nav-arrow" @touchstart.prevent="touchStart($event, toLeft)" @touchend="touchEnd">&larr;</div>
+          <div class="--nav-arrow" @touchstart.prevent="touchStart($event, toRight)" @touchend="touchEnd">&rarr;</div>
+          <div class="--nav-arrow" @click.prevent="rotateBlock">&uarr;</div>
+          <div class="--nav-arrow" @touchstart.prevent="touchStart($event, toDown)" @touchend="touchEnd">&darr;</div>
         </div>
       </template>
-      <tetris-menu v-if="isPause"
-                   :has-game-progress="hasGameProgress"
-                   @tetris:new-game="onClickNewGame"
-                   @tetris:resume="onClickResume"/>
+      <TetrisMenu
+          v-if="isPause"
+          :has-game-progress="hasGameProgress"
+          @tetris:new-game="onClickNewGame"
+          @tetris:resume="onClickResume"/>
     </template>
   </div>
 </template>
@@ -57,7 +60,7 @@
   import { Component, Vue, Watch } from 'vue-property-decorator'
   import { namespace } from 'vuex-class'
   import TetrisMenu from '../TetrisMenu'
-  import { Block, Color, Stat } from '../../types'
+  import { Block, Color, Stat, State } from '../../types'
 
   const progress = namespace('progress')
 
@@ -81,7 +84,7 @@
     touchIntervalId: any
     gameIntervalId: any
 
-    grid: object[][] = []
+    grid: State[][] = []
 
     isPause: boolean = true
     hasGameProgress: boolean = false
@@ -98,7 +101,7 @@
       next: '',
     }
 
-    colors: string[] = ['cell-green', 'cell-red', 'cell-blue', 'cell-orange']
+    colors: string[] = ['-green', '-red', '-blue', '-orange']
 
     block: Block = {
       current: [],
@@ -137,7 +140,6 @@
     ]
 
     created() {
-      this.bindEvents()
       const progress = this.getProgress
 
       if(Object.keys(progress).length) {
@@ -149,6 +151,10 @@
         this.color = progress.color
         this.grid = progress.grid
       }
+    }
+
+    mounted() {
+      this.bindEvents()
     }
 
     createGrid(): void {
@@ -350,6 +356,7 @@
       this.stat.lines = 0
       this.createGrid()
       this.setDefaultOptions()
+      this.$nextTick(this.onResize)
       this.setProgress({})
     }
 
@@ -372,9 +379,17 @@
       this.isLandscape = Math.abs(<number>window.orientation) === 90
     }
 
+    onResize(): void {
+      const main = this.$refs.main as HTMLElement
+      main.style.width = `${main.offsetHeight / 2}px`
+    }
+
     bindEvents(): void {
       document.addEventListener('keydown', this.onKeyDown)
       window.addEventListener('blur', () => this.isPause = true)
+
+      window.addEventListener('resize', this.onResize)
+      this.onResize()
 
       window.addEventListener('orientationchange', this.checkOrientation)
       this.checkOrientation()
@@ -397,146 +412,124 @@
   $headerHeight: 60px;
   $footerHeight: 30px;
 
-  $headerTouchHeight: 60px;
   $footerTouchHeight: 80px;
 
   .tetris {
-    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    @include media-breakpoint-up(lg) {
-      width: calc((100vh - #{$headerHeight} - #{$footerHeight}) / 2);
-    }
-    @include media-breakpoint-down(md) {
-      width: calc((100vh - #{$headerTouchHeight} - #{$footerTouchHeight}) / 2);
-    }
-  }
 
-  .header {
-    display: flex;
-    @include media-breakpoint-up(lg) {
+    .--header {
+      display: flex;
       height: $headerHeight;
     }
-    @include media-breakpoint-down(md) {
-      height: $headerTouchHeight;
+
+    .--menu {
+      width: 20%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
     }
-  }
 
-  .menu {
-    width: 20%;
-    color: #c9ce00;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    cursor: pointer;
-  }
+    .--score {
+      width: 50%;
+      color: #fff;
+      font-size: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  .score {
-    width: 50%;
-    color: #fff;
-    font-size: 1rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .footer {
-    display: flex;
-    @include media-breakpoint-up(lg) {
+    .--footer {
+      display: flex;
       height: $footerHeight;
+
+      @include to(md) {
+        height: $footerTouchHeight;
+      }
     }
-    @include media-breakpoint-down(md) {
-      height: $footerTouchHeight;
+
+    .--nav-arrow {
+      width: 25%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      color: #fff;
+      font-weight: bold;
+      user-select: none;
+      @include from(lg) {
+        display: none;
+      }
     }
-  }
 
-  .nav-arrow {
-    width: 25%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
-    color: #fff;
-    font-weight: bold;
-    user-select: none;
-    @include media-breakpoint-up(lg) {
-      display: none;
+    .--landscape {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-size: 1.2rem;
+      color: #fff;
+      transform: translate(-50%, -50%);
     }
-  }
 
-  .landscape {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    font-size: 1.2rem;
-    color: #fff;
-    transform: translate(-50%, -50%);
-  }
+    .--main {
+      position: relative;
+      width: 100%;
+      flex: 1 0 auto;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #2f2f2f;
+    }
 
-  .main {
-    position: relative;
-    width: 100%;
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #2f2f2f;
-  }
+    .--grid {
+      background: rgba(0, 0, 0, 0.6);
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      flex: 1 0 auto;
 
-  .mini-grid {
-    width: 30%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
+      &.-mini {
+        width: 30%;
+        justify-content: center;
+        align-items: center;
 
-  .mini-grid-row {
-    display: flex;
-  }
+        .--row {
+          flex-basis: auto;
+        }
 
-  .mini-grid-cell {
-    width: 1rem;
-    height: 1rem;
-    border: 1px solid rgba(35, 35, 35, 0);
-  }
+        .--cell {
+          width: 1rem;
+          height: 1rem;
+          flex-basis: auto;
+        }
+      }
+    }
 
-  .grid {
-    background: rgba(0, 0, 0, 0.6);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
-  }
+    .--row {
+      flex-basis: 5%;
+      display: flex;
+    }
 
-  .grid-row {
-    flex: 5%;
-    display: flex;
-    flex-wrap: wrap;
-  }
+    .--cell {
+      flex-basis: 10%;
+      border: 1px solid rgba(35, 35, 35, 0);
 
-  .grid-cell {
-    flex: 10%;
-    border: 1px solid rgba(35, 35, 35, 0);
-  }
-
-  .cell-green {
-    background: #176d00;
-    box-shadow: inset 0 0 4px 2px #28c100;
-  }
-
-  .cell-red {
-    background: #821200;
-    box-shadow: inset 0 0 4px 2px #ee000e;
-  }
-
-  .cell-blue {
-    background: #020084;
-    box-shadow: inset 0 0 4px 2px #0004ee;
-  }
-
-  .cell-orange {
-    background: #914a00;
-    box-shadow: inset 0 0 4px 2px #ee7e00;
+      &.-green {
+        background: #176d00;
+        box-shadow: inset 0 0 4px 2px #28c100;
+      }
+      &.-red {
+        background: #821200;
+        box-shadow: inset 0 0 4px 2px #ee000e;
+      }
+      &.-blue {
+        background: #020084;
+        box-shadow: inset 0 0 4px 2px #0004ee;
+      }
+      &.-orange {
+        background: #914a00;
+        box-shadow: inset 0 0 4px 2px #ee7e00;
+      }
+    }
   }
 </style>
