@@ -381,7 +381,10 @@
 
     onResize(): void {
       const main = this.$refs.main as HTMLElement
-      main.style.width = `${main.offsetHeight / 2}px`
+
+      if(main) {
+        main.style.width = `${main.offsetHeight / 2}px`
+      }
     }
 
     bindEvents(): void {
