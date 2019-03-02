@@ -11,7 +11,7 @@ html {
 body {
   background: #000 url("../assets/bg.png");
 
-  @include media-breakpoint-down(md) {
+  @include to(md) {
     background-size: cover;
   }
 }
