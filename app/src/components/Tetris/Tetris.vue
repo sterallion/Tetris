@@ -497,24 +497,24 @@
         align-items: center;
 
         .--row {
-          flex-basis: auto;
+          flex: none;
         }
 
         .--cell {
           width: 1rem;
           height: 1rem;
-          flex-basis: auto;
+          flex: none;
         }
       }
     }
 
     .--row {
-      flex-basis: 5%;
+      flex: 5%;
       display: flex;
     }
 
     .--cell {
-      flex-basis: 10%;
+      flex: 10%;
       border: 1px solid rgba(35, 35, 35, 0);
 
       &.-green {
